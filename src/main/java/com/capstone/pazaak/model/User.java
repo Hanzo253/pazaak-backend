@@ -2,8 +2,11 @@ package com.capstone.pazaak.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -28,6 +31,10 @@ public class User {
 
     @Column
     private int losses;
+
+    @OneToMany(mappedBy = "user")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<MatchHistory> matchHistoryList;
 
     public User() {
 
@@ -88,6 +95,14 @@ public class User {
 
     public void setLosses(int losses) {
         this.losses = losses;
+    }
+
+    public List<MatchHistory> getMatchHistoryList() {
+        return matchHistoryList;
+    }
+
+    public void setMatchHistoryList(List<MatchHistory> matchHistoryList) {
+        this.matchHistoryList = matchHistoryList;
     }
 
     @Override

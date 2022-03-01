@@ -57,6 +57,16 @@ public class UserController {
         return userService.changePassword(userObject);
     }
 
+    @PutMapping("/wins")
+    public User updateUserWins(@RequestBody User userObject) {
+        return userService.updateUserWins(userObject);
+    }
+
+    @PutMapping("/losses")
+    public User updateUserLosses(@RequestBody User userObject) {
+        return userService.updateUserLosses(userObject);
+    }
+
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser() {
         userService.deleteUserById();

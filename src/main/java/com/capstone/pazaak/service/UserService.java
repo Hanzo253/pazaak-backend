@@ -115,6 +115,32 @@ public class UserService {
         }
     }
 
+    public User updateUserWins(@RequestBody User userObject) {
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findUserByUserName(userDetails.getUser().getUserName());
+
+        if (user == null) {
+            // throw exception if the user does not exist
+            throw new InformationNotFoundException("User not found.");
+        } else {
+            user.setWins(userObject.getWins());
+            return userRepository.save(user);
+        }
+    }
+
+    public User updateUserLosses(@RequestBody User userObject) {
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findUserByUserName(userDetails.getUser().getUserName());
+
+        if (user == null) {
+            // throw exception if the user does not exist
+            throw new InformationNotFoundException("User not found.");
+        } else {
+            user.setLosses(userObject.getLosses());
+            return userRepository.save(user);
+        }
+    }
+
     // deletes the user by their id
     public void deleteUserById() {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
