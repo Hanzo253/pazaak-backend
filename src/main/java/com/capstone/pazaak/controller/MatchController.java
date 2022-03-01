@@ -33,19 +33,19 @@ public class MatchController {
     }
 
     @GetMapping("/match/")
-    public List<Match> getAllPokemon() {
+    public List<Match> getAllMatches() {
         System.out.println("getting all matches...");
         return matchService.getAllMatches();
     }
 
     @GetMapping("/match/{matchId}")
-    public Optional<Match> getPokemon(@PathVariable(value = "matchId") Long matchId) {
+    public Optional<Match> getMatch(@PathVariable(value = "matchId") Long matchId) {
         System.out.println("getting match with an id of " + matchId);
         return matchService.getMatch(matchId);
     }
 
     @PutMapping("/match/{matchId}")
-    public Match updatePokemon(@PathVariable(value = "matchId") Long matchId, @RequestBody Match matchObject) {
+    public Match updateMatch(@PathVariable(value = "matchId") Long matchId, @RequestBody Match matchObject) {
         System.out.println("updating match with an id of " + matchId);
         return matchService.updateMatch(matchId, matchObject);
     }
@@ -58,7 +58,7 @@ public class MatchController {
     }
 
     @DeleteMapping("/pokemon/")
-    public ResponseEntity<String> deletePokemon() {
+    public ResponseEntity<String> deleteAllMatches() {
         System.out.println("deleting all matches...");
         matchService.deleteAllMatches();
         return ResponseEntity.ok().body("Deleting all matches...");

@@ -18,7 +18,7 @@ public class Match {
     private String result;
 
     @Column
-    private Date matchDate;
+    private String matchDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -28,7 +28,7 @@ public class Match {
     public Match() {
     }
 
-    public Match(Long id, String result, Date matchDate) {
+    public Match(Long id, String result, String matchDate) {
         this.id = id;
         this.result = result;
         this.matchDate = matchDate;
@@ -50,11 +50,11 @@ public class Match {
         this.result = result;
     }
 
-    public Date getMatchDate() {
+    public String getMatchDate() {
         return matchDate;
     }
 
-    public void setMatchDate(Date matchDate) {
+    public void setMatchDate(String matchDate) {
         this.matchDate = matchDate;
     }
 
