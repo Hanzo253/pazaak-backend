@@ -1,111 +1,66 @@
 package com.capstone.pazaak.controller;
 
-import com.capstone.pazaak.exceptions.InformationExistsException;
-import com.capstone.pazaak.exceptions.InformationNotFoundException;
 import com.capstone.pazaak.model.Match;
-import com.capstone.pazaak.repository.MatchRepository;
-import com.capstone.pazaak.security.MyUserDetails;
+import com.capstone.pazaak.service.MatchService;
 import com.capstone.pazaak.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@RestController
+@RequestMapping(path = "/api") // means http://localhost:9092/api/
 public class MatchController {
-    private MatchRepository matchRepository;
     private UserService userService;
-
-    @Autowired
-    public void setMatchRepository(MatchRepository matchRepository) {
-        this.matchRepository = matchRepository;
-    }
+    private MatchService matchService;
 
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
-    // create a match
-    public Match createMatch(Match matchObject) {
-        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Match match = matchRepository.findByIdAndUserId(matchObject.getId(), userDetails.getUser().getId());
-
-        if (match != null) {
-            // throw exception if the match already exists
-            throw new InformationExistsException("match already exists.");
-        } else {
-            matchObject.setUser(userDetails.getUser());
-            return matchRepository.save(matchObject);
-        }
+    @Autowired
+    public void setMatchService(MatchService matchService) {
+        this.matchService = matchService;
     }
 
-    // returns all the user's matches
-    public List<Match> getAllMatches() {
-        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Match> matches = matchRepository.findByUserId(userDetails.getUser().getId());
-
-        if (matches.isEmpty()) {
-            // throw exception when the match list is empty
-            throw new InformationNotFoundException("no match found for user id " + userDetails.getUser().getId());
-        } else {
-            return matches;
-        }
+    @PostMapping("/match/")
+    public Match createMatch(@RequestBody Match matchObject) {
+        System.out.println("creating new match....");
+        return matchService.createMatch(matchObject);
     }
 
-    // returns a user's match based on the match id
-    public Optional<Match> getMatch(Long matchId) {
-        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Match match = matchRepository.findByIdAndUserId(matchId, userDetails.getUser().getId());
-        if (match == null) {
-            // throw exception if the pokemon id does not exist
-            throw new InformationNotFoundException("match with id " + matchId + " not found.");
-        } else {
-            return Optional.ofNullable(match);
-        }
+    @GetMapping("/match/")
+    public List<Match> getAllPokemon() {
+        System.out.println("getting all matches...");
+        return matchService.getAllMatches();
     }
 
-    // updates the match's information
-    public Match updateMatch(Long matchId, @RequestBody Match matchObject) {
-        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Match match = matchRepository.findByIdAndUserId(matchId, userDetails.getUser().getId());
-
-        if (match == null) {
-            throw new InformationNotFoundException("match with id " + matchId + " not found");
-        } else {
-            match.setUser(userDetails.getUser());
-            match.setResult(matchObject.getResult());
-            match.setMatchDate(matchObject.getMatchDate());
-            return matchRepository.save(match);
-        }
+    @GetMapping("/match/{matchId}")
+    public Optional<Match> getPokemon(@PathVariable(value = "matchId") Long matchId) {
+        System.out.println("getting match with an id of " + matchId);
+        return matchService.getMatch(matchId);
     }
 
-    // delete a user's match based on the match id given
-    public void deleteMatch(Long matchId) {
-        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Match match = matchRepository.findByIdAndUserId(matchId, userDetails.getUser().getId());
-        if (match == null) {
-            // throw exception if the pokemon id does not exist
-            throw new InformationNotFoundException("match with id " + matchId + " not found.");
-        } else {
-            matchRepository.deleteById(matchId);
-        }
+    @PutMapping("/match/{matchId}")
+    public Match updatePokemon(@PathVariable(value = "matchId") Long matchId, @RequestBody Match matchObject) {
+        System.out.println("updating match with an id of " + matchId);
+        return matchService.updateMatch(matchId, matchObject);
     }
 
-    // delete all the user's match
-    public void deleteAllPokemon() {
-        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Match> matches = matchRepository.findByUserId(userDetails.getUser().getId());
-
-        if (matches.isEmpty()) {
-            // throw exception when the matches list is empty
-            throw new InformationNotFoundException("no matches found for user id " + userDetails.getUser().getId());
-        } else {
-            matchRepository.deleteAll();
-        }
+    @DeleteMapping("/match/{matchId}")
+    public ResponseEntity<String> deleteMatch(@PathVariable(value = "matchId") Long matchId) {
+        System.out.println("deleting match with id " + matchId);
+        matchService.deleteMatch(matchId);
+        return ResponseEntity.ok().body("Deleting match with id " + matchId);
     }
 
+    @DeleteMapping("/pokemon/")
+    public ResponseEntity<String> deletePokemon() {
+        System.out.println("deleting all matches...");
+        matchService.deleteAllMatches();
+        return ResponseEntity.ok().body("Deleting all matches...");
+    }
 }
