@@ -6,8 +6,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "matchhistory")
-public class MatchHistory {
+@Table(name = "matches")
+public class Match {
 
     @Id
     @Column
@@ -25,10 +25,10 @@ public class MatchHistory {
     @JsonIgnore
     private User user;
 
-    public MatchHistory() {
+    public Match() {
     }
 
-    public MatchHistory(Long id, String result, Date matchDate) {
+    public Match(Long id, String result, Date matchDate) {
         this.id = id;
         this.result = result;
         this.matchDate = matchDate;

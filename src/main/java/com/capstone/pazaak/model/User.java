@@ -1,6 +1,5 @@
 package com.capstone.pazaak.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -34,7 +33,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<MatchHistory> matchHistoryList;
+    private List<Match> matchList;
 
     public User() {
 
@@ -97,12 +96,12 @@ public class User {
         this.losses = losses;
     }
 
-    public List<MatchHistory> getMatchHistoryList() {
-        return matchHistoryList;
+    public List<Match> getMatchHistoryList() {
+        return matchList;
     }
 
-    public void setMatchHistoryList(List<MatchHistory> matchHistoryList) {
-        this.matchHistoryList = matchHistoryList;
+    public void setMatchHistoryList(List<Match> matchList) {
+        this.matchList = matchList;
     }
 
     @Override
