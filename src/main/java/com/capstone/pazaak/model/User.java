@@ -1,5 +1,6 @@
 package com.capstone.pazaak.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -22,15 +23,23 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Column
+    private int wins;
+
+    @Column
+    private int losses;
+
     public User() {
 
     }
 
-    public User(Long id, String userName, String emailAddress, String password) {
+    public User(Long id, String userName, String emailAddress, String password, int wins, int losses) {
         this.id = id;
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.password = password;
+        this.wins = wins;
+        this.losses = losses;
     }
 
     public Long getId() {
@@ -65,6 +74,22 @@ public class User {
         this.password = password;
     }
 
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getLosses() {
+        return losses;
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -72,6 +97,8 @@ public class User {
                 ", userName='" + userName + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
                 ", password='" + password + '\'' +
+                ", wins=" + wins +
+                ", losses=" + losses +
                 '}';
     }
 }
