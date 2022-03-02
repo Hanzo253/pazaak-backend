@@ -1,7 +1,9 @@
 package com.capstone.pazaak.controller;
 
+import com.capstone.pazaak.model.Match;
 import com.capstone.pazaak.model.Request.LoginRequest;
 import com.capstone.pazaak.model.User;
+import com.capstone.pazaak.service.MatchService;
 import com.capstone.pazaak.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,11 +11,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/auth/users")
 public class UserController {
     private UserService userService;
+    private MatchService matchService;
     private AuthenticationManager authenticationManager;
     private UserDetailsService userDetailsService;
 
@@ -30,6 +35,11 @@ public class UserController {
     @Autowired
     public void setUserDetailsService(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
+    }
+
+    @Autowired
+    public void setMatchService(MatchService matchService) {
+        this.matchService = matchService;
     }
 
     @PostMapping("/register")

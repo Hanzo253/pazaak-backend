@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping(path = "/api") // means http://localhost:9092/api/
+@RequestMapping(path = "/api") // means http://localhost:9092/api/users
 public class MatchController {
     private UserService userService;
     private MatchService matchService;
@@ -58,7 +58,7 @@ public class MatchController {
         return ResponseEntity.ok().body("Deleting match with id " + matchId);
     }
 
-    @DeleteMapping("/pokemon/")
+    @DeleteMapping("/match/")
     public ResponseEntity<String> deleteAllMatches() {
         System.out.println("deleting all matches...");
         matchService.deleteAllMatches();
