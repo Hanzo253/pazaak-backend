@@ -95,13 +95,23 @@ public class UserService {
     }
 
     // getter for the user
-    //    @Override
+//    @Override
     public User getUser(String username) {
         if (userRepository.findUserByUserName(username) == null) {
             // throw exception if the user does not exist
             throw new InformationNotFoundException("User not found.");
         } else {
             return userRepository.findUserByUserName(username);
+        }
+    }
+    public User getUserByJWT() {
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findUserByUserName(userDetails.getUser().getUserName());
+        if (user == null) {
+            // throw exception if the user does not exist
+            throw new InformationNotFoundException("User not found.");
+        } else {
+            return user;
         }
     }
 

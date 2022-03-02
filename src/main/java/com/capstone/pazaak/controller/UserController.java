@@ -53,6 +53,11 @@ public class UserController {
         return userService.getUser(username);
     }
 
+    @GetMapping("/user")
+    public User getUserByJWT() {
+        return userService.getUserByJWT();
+    }
+
     @PutMapping("/changepassword")
     public User changePassword(@RequestBody User userObject) {
         return userService.changePassword(userObject);
