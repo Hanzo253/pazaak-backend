@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.cors.CorsConfiguration;
@@ -36,6 +37,13 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Autowired
     public void setJwtRequestFilter(JwtRequestFilter jwtRequestFilter) {
         this.jwtRequestFilter = jwtRequestFilter;
+    }
+
+    private CorsFilterConfig corsFilterConfig;
+
+    @Autowired
+    public void setCorsFilterConfig(CorsFilterConfig corsFilterConfig) {
+        this.corsFilterConfig = corsFilterConfig;
     }
 
     // step 1
@@ -65,6 +73,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/auth/users/changepassword",
                         "/auth/users/wins", "/auth/users/losses", "/api/match/").permitAll().anyRequest().authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable();
+        http.addFilterBefore(corsFilterConfig, ChannelProcessingFilter.class);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
